@@ -1,3 +1,4 @@
+Checkout the code shown here at [example](https://github.com/redstone-dart/redstone-mvc-plugin/tree/master/example) folder.
 # Redstone MVC
 
 MVC Plugin for Redstone allows you to create routes that render `mustache`
