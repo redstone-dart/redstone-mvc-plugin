@@ -24,8 +24,7 @@ class Example {
  * a simple mustache template at route '/stringTemplate' using the information
  * from the [Example] instance returned by the route function [stringTemplate].
  */
-@mvc.ViewController('/stringTemplate', template: 
-'''
+@mvc.ViewController('/stringTemplate', template: '''
   <div>
     <h2>{{title}}</h2>
     <p>{{description}}</p>
@@ -40,10 +39,10 @@ stringTemplate() => new Example()
  * to specify the path of your file. By default it will its a .html file, if
  * you need a diferent extension, use the [extension] parameter to specify it.
  * 
- * In this example we are rendering the `/examples/lib/template.html` on
+ * In this example we are rendering the `/example/lib/template.html` on
  * route `/fileTemplate` using an [Example] instance as a model.
  */
-@mvc.ViewController('/fileTemplate', filePath: '/examples/lib/template')
+@mvc.ViewController('/fileTemplate', filePath: '/example/lib/template')
 fileTemplate() => new Example()
   ..title = "MVC"
   ..description = "MVC is very easy with Redstone";
@@ -52,7 +51,7 @@ fileTemplate() => new Example()
  * If [filePath] and your route path match, you unspecify [filePath] and
  * ViewController will use the route path to find your template file.
  */
-@mvc.ViewController('/examples/lib/template')
+@mvc.ViewController('/example/lib/template')
 viewController() => new Example()
   ..title = "MVC"
   ..description = "MVC is very easy with Redstone";
@@ -62,7 +61,7 @@ viewController() => new Example()
  * template file, you use `subpath` to complete the remaining parts. Setting
  * `subpath` will have no effect if you specified `filePath`.
  */
-@mvc.ViewController ('/examples/lib', subpath: '/template')
+@mvc.ViewController('/example/lib', subpath: '/template')
 subPath() => new Example()
   ..title = "Using subpath"
   ..description = "Just appends to the path";
@@ -72,7 +71,7 @@ subPath() => new Example()
  * prepend to both [filePath] and your route's path, depending on which
  * is used.
  */
-@mvc.ViewController('/template', root: '/examples/lib')
+@mvc.ViewController('/template', root: '/example/lib')
 viewControllerRoot() => new Example()
   ..title = "MVC"
   ..description = "MVC is very easy with Redstone";
@@ -86,16 +85,15 @@ viewControllerRoot() => new Example()
  * [urlPrefix] as second argument. Your normal complete path to file will
  * be [root] + [urlPrefix] + [urlTemplate], where urlTemplate is your
  */
-@mvc.ControllerGroup ('/examples/lib', '/info')
-class ExampleService1
-{
-  @mvc.ViewController ('/A')
-  viewA () => new Example()
+@mvc.ControllerGroup('/example/lib', '/info')
+class ExampleService1 {
+  @mvc.ViewController('/A')
+  viewA() => new Example()
     ..title = "Route A"
     ..description = "Some description of A";
-  
-  @mvc.ViewController ('/B')
-  viewB () => new Example()
+
+  @mvc.ViewController('/B')
+  viewB() => new Example()
     ..title = "Route B"
     ..description = "Some description of B";
 }
@@ -106,18 +104,17 @@ class ExampleService1
  * [ViewController].
  * 
  * In this example, routes will be '/info2/A' and '/info2/B', but
- * for both their template is '/examples/lib/template.html'.
+ * for both their template is '/example/lib/template.html'.
  */
-@mvc.ControllerGroup ('/examples/lib', '/info2')
-class ExampleService2
-{
-  @mvc.ViewController ('/A', filePath: '/template')
-  viewA () => new Example()
+@mvc.ControllerGroup('/example/lib', '/info2')
+class ExampleService2 {
+  @mvc.ViewController('/A', filePath: '/template')
+  viewA() => new Example()
     ..title = "Route A"
     ..description = "Some description of A";
-  
-  @mvc.ViewController ('/B', filePath: '/template')
-  viewB () => new Example()
+
+  @mvc.ViewController('/B', filePath: '/template')
+  viewB() => new Example()
     ..title = "Route B"
     ..description = "Some description of B";
 }
@@ -130,13 +127,13 @@ class ExampleService2
  * [Model_StringTemplate] and [Model_Template] exist to provide similar
  * features.
  */
-@mvc.ViewController ('/randomTemplate', root: '/examples/lib/info')
-dynamicFilePath ()
-{
+@mvc.ViewController('/randomTemplate', root: '/example/lib/info')
+dynamicFilePath() {
   var filePath = new math.Random().nextBool() ? '/A' : '/B';
   var model = new Example()
     ..title = "Dynamic File Path"
-    ..description = 'If you return a Model_Path you can set the templates path dynamically';
-  
+    ..description =
+    'If you return a Model_Path you can set the templates path dynamically';
+
   return new mvc.Model_Path(model, filePath);
 }
