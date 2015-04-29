@@ -7,22 +7,34 @@ class Root
   static const String web = '/web';
 }
 
+class FilePath
+{
+  final String path;
+  final String extension;
+  
+  FilePath (this.path, {this.extension: 'html'});
+  
+  String get filePath => '$path.$extension';
+}
+
 abstract class RouteBuilder
 {
   String buildRoute (String urlPath, ControllerGroup controllerGroup);
+  String get template;
 }
 
 class Render implements RouteBuilder
 {
   final String path;
   final String extension;
-  final bool ignoreRoot;
+  final bool includeRoot;
+  final String template;
   
-  const Render (this.path, {this.extension: 'html', this.ignoreRoot: false});
+  const Render (this.path, {this.extension: 'html', this.includeRoot: true, this.template});
   
   String buildRoute (String urlPath, ControllerGroup controllerGroup)
   {
-    var root = ignoreRoot ? '' :
+    var root = ! includeRoot ? '' :
                 controllerGroup != null ? controllerGroup.root :
                 '';
     return '$root$path.$extension';
@@ -55,20 +67,23 @@ class DataControllerDefault extends app.DefaultRoute
 class ViewController extends app.Route implements RouteBuilder {
   final String root;
   final String fullFilePath;
-  final bool ignoreRoot;
+  final bool includeRoot;
   final String extension;
   final String urlPosfix;
+  final String template;
   
   const ViewController(String urlTemplate, {List<String> methods: const [app.GET],
     String responseType, int statusCode: 200, bool allowMultipartRequest: false,
-    bool matchSubPaths: false, this.root, this.fullFilePath, this.ignoreRoot: false, this.extension: 'html', this.urlPosfix})
+    bool matchSubPaths: false, this.root, this.fullFilePath, this.includeRoot: true,
+    this.extension: 'html', this.urlPosfix, this.template})
+      
       : super (urlTemplate, methods: methods, responseType: responseType,
           statusCode: statusCode, allowMultipartRequest: allowMultipartRequest,
           matchSubPaths: matchSubPaths);
   
   String buildRoute (String urlPath, ControllerGroup controlGroup)
   {
-    var root = ignoreRoot ? '' :
+    var root = ! includeRoot ? '' :
                 this.root != null ? this.root :
                 controlGroup != null ? controlGroup.root :
                 '';
@@ -84,20 +99,23 @@ class ViewController extends app.Route implements RouteBuilder {
 class ViewControllerDefault extends app.DefaultRoute implements RouteBuilder {
   final String root;
   final String fullFilePath;
-  final bool ignoreRoot;
+  final bool includeRoot;
   final String extension;
   final String urlPosfix;
+  final String template;
   
   const ViewControllerDefault({List<String> methods: const [app.GET],
     String responseType, int statusCode: 200, bool allowMultipartRequest: false,
-    bool matchSubPaths: false, this.root, this.fullFilePath, this.ignoreRoot: false, this.extension: 'html', this.urlPosfix})
+    bool matchSubPaths: false, this.root, this.fullFilePath, this.includeRoot: true,
+    this.extension: 'html', this.urlPosfix, this.template})
+    
       : super (methods: methods, responseType: responseType,
           statusCode: statusCode, allowMultipartRequest: allowMultipartRequest,
           matchSubPaths: matchSubPaths);
   
   String buildRoute (String urlPath, ControllerGroup controlGroup)
   {
-    var root = ignoreRoot ? '' :
+    var root = ! includeRoot ? '' :
                 this.root != null ? this.root :
                 controlGroup != null ? controlGroup.root :
                 '';
