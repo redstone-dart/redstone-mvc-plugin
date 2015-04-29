@@ -28,6 +28,7 @@ class Example {
   @Field() String description;
 }
 ```
+##ViewController
 `ViewController` extends `Route` so you can easy replace the routes you want to render html with a `ViewController`. The next examples shows how to use the `template` parameter to render a simple mustache template at route `/stringTemplate` using the information from the `Example` instance model returned by the route function `stringTemplate`.
 ```dart
 @mvc.ViewController('/stringTemplate', template: 
