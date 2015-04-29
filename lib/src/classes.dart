@@ -90,14 +90,14 @@ class ViewController extends app.Route implements RouteBuilder {
   final String filePath;
   final bool includeRoot;
   final String extension;
-  final String pathPosfix;
+  final String subpath;
   final String template;
 
   const ViewController(String urlTemplate,
       {List<String> methods: const [app.GET], String responseType,
       int statusCode: 200, bool allowMultipartRequest: false,
       bool matchSubPaths: false, this.root, this.filePath,
-      this.includeRoot: true, this.extension: 'html', this.pathPosfix,
+      this.includeRoot: true, this.extension: 'html', this.subpath,
       this.template})
       : super(urlTemplate,
           methods: methods,
@@ -108,7 +108,7 @@ class ViewController extends app.Route implements RouteBuilder {
 
   String buildRoute(String urlPath, ControllerGroup controllerGroup) {
     var root = buildRoot(controllerGroup);
-    var posfix = pathPosfix != null ? pathPosfix : '';
+    var posfix = subpath != null ? subpath : '';
 
     return filePath != null
         ? '$root$filePath.$extension'

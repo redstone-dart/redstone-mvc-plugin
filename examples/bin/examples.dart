@@ -40,7 +40,8 @@ stringTemplate() => new Example()
  * to specify the path of your file. By default it will its a .html file, if
  * you need a diferent extension, use the [extension] parameter to specify it.
  * 
- * In this example we are loading the 
+ * In this example we are rendering the `/examples/lib/template.html` on
+ * route `/fileTemplate` using an [Example] instance as a model.
  */
 @mvc.ViewController('/fileTemplate', filePath: '/examples/lib/template')
 fileTemplate() => new Example()
@@ -55,6 +56,16 @@ fileTemplate() => new Example()
 viewController() => new Example()
   ..title = "MVC"
   ..description = "MVC is very easy with Redstone";
+
+/**
+ * If the route's `urlTemplate` path doesn't take you all the way to your
+ * template file, you use `subpath` to complete the remaining parts. Setting
+ * `subpath` will have no effect if you specified `filePath`.
+ */
+@mvc.ViewController ('/examples/lib', subpath: '/template')
+subPath() => new Example()
+  ..title = "Using subpath"
+  ..description = "Just appends to the path";
 
 /**
  * Set a folder as [root] so you don't polute your route. [root] will
