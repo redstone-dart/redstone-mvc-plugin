@@ -1,18 +1,11 @@
-# Redstone MVC
-
-MVC Plugin for Redstone allows you to create routes that render mustach
-templates for you based on the return object. Using the custom @ViewController
-annotation, you can both specify both the http route the function will
-respond to and the template that will be rendered.
-
-To setup the plugin, you need add `mvc.mvcPlugin` to `app.addPlugin` on
-the `main` function.
-
-
 import 'package:redstone/server.dart' as app;
 import 'package:redstone_mapper/mapper.dart';
 import 'dart:math' as math;
-import 'package:redstone_mvc/redstone_mvc.dart' as mvc;
+/* 
+ * Use 'package:redstone_mvc/redstone_mvc.dart' if didn't clone
+ * redstone_mvc but copied the 'examples' folder instead.
+ */
+import '../../lib/redstone_mvc.dart' as mvc;
 
 main() {
   app.addPlugin(mvc.mvcPluggin);
@@ -136,4 +129,3 @@ dynamicFilePath ()
   
   return new mvc.Model_Path(model, filePath);
 }
-

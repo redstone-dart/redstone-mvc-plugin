@@ -11,41 +11,51 @@ makeRenderResponse(value, RouteBuilder routeBuilder) async {
   if (value is String) {
     return new shelf.Response.ok(value, headers: headers);
   }
+  
+  //Get ViewGroup
+  ControllerGroup controllerGroup = app.request.attributes.controllerGroup__;
 
   Template template;
-  Object object;
+  Object model;
 
-  if (value is Tuple2<FilePath, Object>) {
+  if (routeBuilder.template != null) {
+    //Define template/object
+    template = new Template(routeBuilder.template, lenient: true);
+    model = value;
+    
+  } else if (value is Model_Path) {
+    
+    var root = routeBuilder.buildRoot(controllerGroup);
+    var filePath = root + value.filePath;
     //Get html file
-    var html = await new File(path.current + value.i1.filePath).readAsString();
+    var html = await new File(path.current + filePath).readAsString();
     //Define template/object
     template = new Template(html, lenient: true);
-    object = value.i2;
+    model = value.model;
     
-  } else if (value is Tuple2<String, Object>) {
+  } else if (value is Model_StringTemplate) {
     //Define template/object
-    template = new Template(value.i1, lenient: true);
-    object = value.i2;
+    template = new Template(value.template, lenient: true);
+    model = value.model;
     
-  } else if (value is Tuple2<Template, Object>) {
+  } else if (value is Model_Template) {
     //Define template/object
-    template = value.i1;
-    object = value.i2;
+    template = value.template;
+    model = value.model;
     
   } else {
-    //Get ViewGroup
-    ControllerGroup controllerGroup = app.request.attributes.controllerGroup__;
+    
     //Create route
     var route = routeBuilder.buildRoute(app.request.url.path, controllerGroup);
     //Get html file
     var html = await new File(path.current + route).readAsString();
     //Define template/object
     template = new Template(html, lenient: true);
-    object = value;
+    model = value;
   }
   
   //Render template with encoded object
-  var renderedTemplate = template.renderString(encode(object));
+  var renderedTemplate = template.renderString(encode(model));
 
   return new shelf.Response.ok(renderedTemplate, headers: headers);
 }

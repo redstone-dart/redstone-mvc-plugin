@@ -1,7 +1,7 @@
 part of redstone.mvc;
 
 void mvcPluggin(app.Manager manager) {
-  
+  bootstrapMapper();
   //Controller Group
   manager.addRouteWrapper(ControllerGroup, (metadata, Map<String, String> pathSegments, injector, request, route) async {
     
@@ -26,9 +26,9 @@ void mvcPluggin(app.Manager manager) {
   });
   
   //Render
-  manager.addResponseProcessor(Render, (Render metadata, handlerName, value, injector) async {
-    return makeRenderResponse(value, metadata);
-  });
+//  manager.addResponseProcessor(Render, (Render metadata, handlerName, value, injector) async {
+//    return makeRenderResponse(value, metadata);
+//  });
   
   //DataController
   manager.addResponseProcessor(DataController, (DataController metadata, handlerName, value, injector) async {

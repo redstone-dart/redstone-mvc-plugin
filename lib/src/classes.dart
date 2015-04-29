@@ -1,98 +1,126 @@
 part of redstone.mvc;
 
-class Root
-{
+class Root {
   static const String bin = '/bin';
   static const String lib = '/lib';
   static const String web = '/web';
 }
 
-class FilePath
-{
+class Model_Path {
   final String path;
   final String extension;
-  
-  FilePath (this.path, {this.extension: 'html'});
-  
+  final Object model;
+
+  Model_Path(this.model, this.path, {this.extension: 'html'});
+
   String get filePath => '$path.$extension';
 }
 
-abstract class RouteBuilder
+class Model_StringTemplate
 {
-  String buildRoute (String urlPath, ControllerGroup controllerGroup);
-  String get template;
-}
-
-class Render implements RouteBuilder
-{
-  final String path;
-  final String extension;
-  final bool includeRoot;
+  final Object model;
   final String template;
   
-  const Render (this.path, {this.extension: 'html', this.includeRoot: true, this.template});
+  Model_StringTemplate (this.model, this.template);
+}
+
+class Model_Template
+{
+  final Object model;
+  final Template template;
   
-  String buildRoute (String urlPath, ControllerGroup controllerGroup)
-  {
-    var root = ! includeRoot ? '' :
-                controllerGroup != null ? controllerGroup.root :
-                '';
-    return '$root$path.$extension';
-  }
+  Model_Template (this.model, this.template);
 }
 
-class DataController extends app.Route
-{
-  const DataController(String urlTemplate, {List<String> methods: const [app.GET],
-    String responseType, int statusCode: 200, bool allowMultipartRequest: false,
-    bool matchSubPaths: false})
-      : super (urlTemplate, methods: methods, responseType: responseType,
-          statusCode: statusCode, allowMultipartRequest: allowMultipartRequest,
+abstract class RouteBuilder {
+  String buildRoute(String urlPath, ControllerGroup controllerGroup);
+  String get template;
+  String buildRoot (ControllerGroup controllerGroup);
+}
+
+//class Render implements RouteBuilder {
+//  final String path;
+//  final String extension;
+//  final bool includeRoot;
+//  final String template;
+//
+//  const Render({this.path, this.extension: 'html', this.includeRoot: true,
+//      this.template});
+//
+//  String buildRoute(String urlPath, ControllerGroup controllerGroup) {
+//    var root = !includeRoot ? '' :
+//               controllerGroup != null ? controllerGroup.root :
+//               '';
+//    
+//    if (path == null)
+//      throw new ArgumentError.notNull('null path field in Render instance');
+//    
+//    return '$root$path.$extension';
+//  }
+//}
+
+class DataController extends app.Route {
+  const DataController(String urlTemplate,
+      {List<String> methods: const [app.GET], String responseType,
+      int statusCode: 200, bool allowMultipartRequest: false,
+      bool matchSubPaths: false})
+      : super(urlTemplate,
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
           matchSubPaths: matchSubPaths);
 }
 
-class DataControllerDefault extends app.DefaultRoute
-{
+class DataControllerDefault extends app.DefaultRoute {
   const DataControllerDefault({List<String> methods: const [app.GET],
-    String responseType, int statusCode: 200, bool allowMultipartRequest: false,
-    bool matchSubPaths: false})
-      : super (methods: methods, responseType: responseType,
-          statusCode: statusCode, allowMultipartRequest: allowMultipartRequest,
+      String responseType, int statusCode: 200,
+      bool allowMultipartRequest: false, bool matchSubPaths: false})
+      : super(
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
           matchSubPaths: matchSubPaths);
 }
-/**
- * Examples:
- * 
- */
+
+
 class ViewController extends app.Route implements RouteBuilder {
   final String root;
-  final String fullFilePath;
+  final String filePath;
   final bool includeRoot;
   final String extension;
-  final String urlPosfix;
+  final String pathPosfix;
   final String template;
-  
-  const ViewController(String urlTemplate, {List<String> methods: const [app.GET],
-    String responseType, int statusCode: 200, bool allowMultipartRequest: false,
-    bool matchSubPaths: false, this.root, this.fullFilePath, this.includeRoot: true,
-    this.extension: 'html', this.urlPosfix, this.template})
-      
-      : super (urlTemplate, methods: methods, responseType: responseType,
-          statusCode: statusCode, allowMultipartRequest: allowMultipartRequest,
+
+  const ViewController(String urlTemplate,
+      {List<String> methods: const [app.GET], String responseType,
+      int statusCode: 200, bool allowMultipartRequest: false,
+      bool matchSubPaths: false, this.root, this.filePath,
+      this.includeRoot: true, this.extension: 'html', this.pathPosfix,
+      this.template})
+      : super(urlTemplate,
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
           matchSubPaths: matchSubPaths);
+
+  String buildRoute(String urlPath, ControllerGroup controllerGroup) {
+    var root = buildRoot(controllerGroup);
+    var posfix = pathPosfix != null ? pathPosfix : '';
+
+    return filePath != null
+        ? '$root$filePath.$extension'
+        : '$root$urlPath$posfix.$extension';
+  }
+
   
-  String buildRoute (String urlPath, ControllerGroup controlGroup)
-  {
-    var root = ! includeRoot ? '' :
-                this.root != null ? this.root :
-                controlGroup != null ? controlGroup.root :
-                '';
-    
-    var posfix = urlPosfix != null ? urlPosfix : '';
-    
-    return fullFilePath != null ?
-        '$root$fullFilePath.$extension' :
-        '$root$urlPath$posfix.$extension';
+  String buildRoot(ControllerGroup controllerGroup) {
+    return ! includeRoot ?  ''
+        : this.root != null ? this.root
+        : controllerGroup != null ? controllerGroup.root
+        : '';
   }
 }
 
@@ -103,33 +131,38 @@ class ViewControllerDefault extends app.DefaultRoute implements RouteBuilder {
   final String extension;
   final String urlPosfix;
   final String template;
-  
+
   const ViewControllerDefault({List<String> methods: const [app.GET],
-    String responseType, int statusCode: 200, bool allowMultipartRequest: false,
-    bool matchSubPaths: false, this.root, this.fullFilePath, this.includeRoot: true,
-    this.extension: 'html', this.urlPosfix, this.template})
-    
-      : super (methods: methods, responseType: responseType,
-          statusCode: statusCode, allowMultipartRequest: allowMultipartRequest,
+      String responseType, int statusCode: 200,
+      bool allowMultipartRequest: false, bool matchSubPaths: false, this.root,
+      this.fullFilePath, this.includeRoot: true, this.extension: 'html',
+      this.urlPosfix, this.template})
+      : super(
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
           matchSubPaths: matchSubPaths);
-  
-  String buildRoute (String urlPath, ControllerGroup controlGroup)
-  {
-    var root = ! includeRoot ? '' :
-                this.root != null ? this.root :
-                controlGroup != null ? controlGroup.root :
-                '';
-    
+
+  String buildRoute(String urlPath, ControllerGroup controllerGroup) {
+    var root = buildRoot(controllerGroup);
     var posfix = urlPosfix != null ? urlPosfix : '';
-    
-    return fullFilePath != null ?
-        '$root$fullFilePath.$extension' :
-        '$root$urlPath$posfix.$extension';
+
+    return fullFilePath != null
+        ? '$root$fullFilePath.$extension'
+        : '$root$urlPath$posfix.$extension';
+  }
+
+  String buildRoot(ControllerGroup controllerGroup) {
+    return !includeRoot ? ''
+        : this.root != null ? this.root
+        : controllerGroup != null ? controllerGroup.root
+        : '';
   }
 }
 
 class ControllerGroup extends app.Group {
   final String root;
-  
-  const ControllerGroup(this.root, String urlPrefix): super (urlPrefix);
+
+  const ControllerGroup(this.root, String urlPrefix) : super(urlPrefix);
 }
