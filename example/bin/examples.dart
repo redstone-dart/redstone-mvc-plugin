@@ -81,11 +81,10 @@ viewControllerRoot() => new Example()
  * a section to your [Route]'s path. However, you might also want to
  * specify a common [root] directory to all your [filaPath]s or routes,
  * for this you can use the [ControllerGroup] annotation. [ControllerGroup]
- * extends [Group] and takes [root] as a first argument, and the normal
- * [urlPrefix] as second argument. Your normal complete path to file will
- * be [root] + [urlPrefix] + [urlTemplate], where urlTemplate is your
+ * extends [Group] and takes the normal [urlPrefix] as first argument and an optional
+ * [root] parameters.
  */
-@mvc.ControllerGroup('/example/lib', '/info')
+@mvc.ControllerGroup('/info', root: '/example/lib')
 class ExampleService1 {
   @mvc.ViewController('/A')
   viewA() => new Example()
@@ -106,7 +105,7 @@ class ExampleService1 {
  * In this example, routes will be '/info2/A' and '/info2/B', but
  * for both their template is '/example/lib/template.html'.
  */
-@mvc.ControllerGroup('/example/lib', '/info2')
+@mvc.ControllerGroup('/info2', root: '/example/lib')
 class ExampleService2 {
   @mvc.ViewController('/A', filePath: '/template')
   viewA() => new Example()

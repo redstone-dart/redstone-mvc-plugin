@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/di/lib/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/di/lib/src/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/di/lib/transformer/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/di/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/redstone_mapper/lib/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/redstone_mapper/lib/src/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/debug/redstone_mapper/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/deps/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/.pub/transformers/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/bin/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/lib/info/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/lib/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/packages/redstone_mvc_examples" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/redstone_mvc" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="application" />
+  </component>
+</module>
+

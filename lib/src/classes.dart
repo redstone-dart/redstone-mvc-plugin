@@ -6,30 +6,69 @@ class Root {
   static const String web = '/web';
 }
 
-class Model_Path {
-  final String path;
+abstract class Renderable
+{
+  Object get model;
+  Future<Template> template (RouteBuilder routeBuilder, ControllerGroup controllerGroup);
+}
+
+class Model_RouteBuilder implements Renderable {
+  
+  final Object model;
+  final RouteBuilder routeBuilder;
+  
+  Model_RouteBuilder (this.model, this.routeBuilder);
+  
+  Future<Template> template (RouteBuilder _, ControllerGroup controllerGroup) async
+  {
+    var route = routeBuilder.buildRoute(app.request.url.path, controllerGroup);
+    //Get html file
+    var html = await new File(path.current + route).readAsString();
+    //Define template/object
+    return new Template(html, lenient: true);
+  }
+}
+
+class Model_Path implements Renderable {
+  final String filePath;
   final String extension;
   final Object model;
 
-  Model_Path(this.model, this.path, {this.extension: 'html'});
+  Model_Path(this.model, this.filePath, {this.extension: 'html'});
 
-  String get filePath => '$path.$extension';
+  String get completeFilePath => '$filePath.$extension';
+
+  
+  Future<Template> template(RouteBuilder routeBuilder, ControllerGroup controllerGroup) async {
+    var root = routeBuilder.buildRoot(controllerGroup);
+    var filePath = root + completeFilePath;
+    //Get html file
+    var html = await new File(path.current + filePath).readAsString();
+    //Define template/object
+    return new Template(html, lenient: true);
+  }
 }
 
-class Model_StringTemplate
+class Model_StringTemplate implements Renderable
 {
   final Object model;
-  final String template;
+  final String stringTemplate;
   
-  Model_StringTemplate (this.model, this.template);
+  Model_StringTemplate (this.model, this.stringTemplate);
+
+  Future<Template> template(RouteBuilder routeBuilder, ControllerGroup controllerGroup) async
+    => new Template(stringTemplate, lenient: true);
 }
 
-class Model_Template
+class Model_Template implements Renderable
 {
   final Object model;
-  final Template template;
+  final Template template_;
   
-  Model_Template (this.model, this.template);
+  Model_Template (this.model, this.template_);
+  
+  Future<Template> template(RouteBuilder routeBuilder, ControllerGroup controllerGroup) async
+    => template_;
 }
 
 abstract class RouteBuilder {
@@ -49,7 +88,7 @@ abstract class RouteBuilder {
 //
 //  String buildRoute(String urlPath, ControllerGroup controllerGroup) {
 //    var root = !includeRoot ? '' :
-//               controllerGroup != null ? controllerGroup.root :
+//               controllerGroup != null && cont ? controllerGroup.root :
 //               '';
 //    
 //    if (path == null)
@@ -119,7 +158,7 @@ class ViewController extends app.Route implements RouteBuilder {
   String buildRoot(ControllerGroup controllerGroup) {
     return ! includeRoot ?  ''
         : this.root != null ? this.root
-        : controllerGroup != null ? controllerGroup.root
+        : controllerGroup != null && controllerGroup.root != null ? controllerGroup.root
         : '';
   }
 }
@@ -156,7 +195,7 @@ class ViewControllerDefault extends app.DefaultRoute implements RouteBuilder {
   String buildRoot(ControllerGroup controllerGroup) {
     return !includeRoot ? ''
         : this.root != null ? this.root
-        : controllerGroup != null ? controllerGroup.root
+        : controllerGroup != null && controllerGroup.root != null ? controllerGroup.root
         : '';
   }
 }
@@ -164,5 +203,5 @@ class ViewControllerDefault extends app.DefaultRoute implements RouteBuilder {
 class ControllerGroup extends app.Group {
   final String root;
 
-  const ControllerGroup(this.root, String urlPrefix) : super(urlPrefix);
+  const ControllerGroup(String urlPrefix, {this.root}) : super(urlPrefix);
 }
