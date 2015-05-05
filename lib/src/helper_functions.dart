@@ -13,7 +13,7 @@ makeRenderResponse(value, RouteBuilder routeBuilder) async {
   }
 
   //Get ViewGroup
-  ControllerGroup controllerGroup = app.request.attributes.controllerGroup__;
+  GroupController controllerGroup = app.request.attributes.controllerGroup__;
   
   //Get model
   Object model = value is Renderable ? value.model : value;

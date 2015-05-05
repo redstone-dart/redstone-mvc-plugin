@@ -3,9 +3,9 @@ part of redstone.mvc;
 void mvcPluggin(app.Manager manager) {
   bootstrapMapper();
   //Controller Group
-  manager.addRouteWrapper(ControllerGroup, (metadata, Map<String, String> pathSegments, injector, request, route) async {
+  manager.addRouteWrapper(GroupController, (metadata, Map<String, String> pathSegments, injector, request, route) async {
     
-    var group = metadata as ControllerGroup;
+    var group = metadata as GroupController;
     
     //Give it an improbable name
     request.attributes.controllerGroup__ = group;
