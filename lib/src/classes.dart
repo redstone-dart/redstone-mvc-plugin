@@ -77,27 +77,6 @@ abstract class RouteBuilder {
   String buildRoot (ControllerGroup controllerGroup);
 }
 
-//class Render implements RouteBuilder {
-//  final String path;
-//  final String extension;
-//  final bool includeRoot;
-//  final String template;
-//
-//  const Render({this.path, this.extension: 'html', this.includeRoot: true,
-//      this.template});
-//
-//  String buildRoute(String urlPath, ControllerGroup controllerGroup) {
-//    var root = !includeRoot ? '' :
-//               controllerGroup != null && cont ? controllerGroup.root :
-//               '';
-//    
-//    if (path == null)
-//      throw new ArgumentError.notNull('null path field in Render instance');
-//    
-//    return '$root$path.$extension';
-//  }
-//}
-
 class DataController extends app.Route {
   const DataController(String urlTemplate,
       {List<String> methods: const [app.GET], String responseType,

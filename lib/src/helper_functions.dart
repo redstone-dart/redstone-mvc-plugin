@@ -34,7 +34,8 @@ makeRenderResponse(value, RouteBuilder routeBuilder) async {
   Template template = await renderable.template(routeBuilder, controllerGroup);
   
   //Render template with encoded object
-  var renderedTemplate = template.renderString(encode(model));
+  var map = model is Map ? model : encode(model);
+  var renderedTemplate = template.renderString (map);
 
   return new shelf.Response.ok(renderedTemplate, headers: headers);
 }
@@ -44,5 +45,7 @@ makeDecodeResponse(value) {
     return value;
   }
 
-  return encode(value);
+  var model = value is Renderable ? value.model : value;
+
+  return encode(model);
 }
