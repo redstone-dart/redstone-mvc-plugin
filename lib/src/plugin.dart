@@ -4,39 +4,35 @@ void mvcPluggin(app.Manager manager) {
   bootstrapMapper();
   //Controller Group
   manager.addRouteWrapper(GroupController, (metadata, Map<String, String> pathSegments, injector, request, route) async {
-    
+
     var group = metadata as GroupController;
-    
+
     //Give it an improbable name
     request.attributes.controllerGroup__ = group;
-    
+
     return route (pathSegments, injector, request);
-    
+
   }, includeGroups: true);
-  
-  
+
+
   //Controller
   manager.addResponseProcessor(ViewController, (ViewController metadata, handlerName, value, injector) async {
-    return makeRenderResponse(value, metadata);
+    return makeViewControllerResponse(value, metadata);
   });
-  
+
   //ControllerDefault
-  manager.addResponseProcessor(ViewControllerDefault, (ViewControllerDefault metadata, handlerName, value, injector) async {
-    return makeRenderResponse(value, metadata);
+  manager.addResponseProcessor(DefaultViewController, (DefaultViewController metadata, handlerName, value, injector) async {
+    return makeViewControllerResponse(value, metadata);
   });
-  
-  //Render
-//  manager.addResponseProcessor(Render, (Render metadata, handlerName, value, injector) async {
-//    return makeRenderResponse(value, metadata);
-//  });
-  
+
+
   //DataController
   manager.addResponseProcessor(DataController, (DataController metadata, handlerName, value, injector) async {
-    return makeDecodeResponse(value);
+    return makeDataControllerResponse(value);
   });
-  
+
   //DataControllerDefault
-  manager.addResponseProcessor(DataControllerDefault, (DataControllerDefault metadata, handlerName, value, injector) async {
-    return makeDecodeResponse(value);
+  manager.addResponseProcessor(DefaultDataController, (DefaultDataController metadata, handlerName, value, injector) async {
+    return makeDataControllerResponse(value);
   });
 }
