@@ -38,7 +38,7 @@ makeViewControllerResponse(value, RouteBuilder routeBuilder) async {
   var renderedTemplate = template.renderString (map);
 
   //Render into master template
-  if (config != null && !controllerGroup.ignoreMaster && !routeBuilder.ignoreMaster) {
+  if (config != null && (controllerGroup == null || !controllerGroup.ignoreMaster) && !routeBuilder.ignoreMaster) {
     Template masterTemplate = await config.template;
     renderedTemplate = masterTemplate.renderString({'view': renderedTemplate});
   }

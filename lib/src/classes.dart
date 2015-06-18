@@ -109,7 +109,7 @@ class DataController extends app.Route {
   const DataController(String urlTemplate,
                        {List<String> methods: const [app.GET], String responseType,
                        int statusCode: 200, bool allowMultipartRequest: false,
-                       bool matchSubPaths: false, String root,
+                       Encoding encoding: UTF8, String root,
                        String filePath, includeRoot: true, String extension: 'html',
                        String subpath, String template})
   : super(urlTemplate,
@@ -117,13 +117,13 @@ class DataController extends app.Route {
   responseType: responseType,
   statusCode: statusCode,
   allowMultipartRequest: allowMultipartRequest,
-  matchSubPaths: matchSubPaths);
+  encoding: encoding);
 }
 
 class DefaultDataController extends app.DefaultRoute {
   const DefaultDataController({List<String> methods: const [app.GET],
                               String responseType, int statusCode: 200,
-                              bool allowMultipartRequest: false, bool matchSubPaths: false, String root,
+                              bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
                               String filePath, includeRoot: true, String extension: 'html',
                               String subpath, String template})
   : super(
@@ -131,7 +131,7 @@ class DefaultDataController extends app.DefaultRoute {
       responseType: responseType,
       statusCode: statusCode,
       allowMultipartRequest: allowMultipartRequest,
-      matchSubPaths: matchSubPaths);
+      encoding: encoding);
 }
 
 class ViewController extends app.Route implements RouteBuilder {
@@ -146,7 +146,7 @@ class ViewController extends app.Route implements RouteBuilder {
   const ViewController(String urlTemplate,
                        {List<String> methods: const [app.GET], String responseType,
                        int statusCode: 200, bool allowMultipartRequest: false,
-                       bool matchSubPaths: false, this.root, this.filePath,
+                       Encoding encoding: UTF8, this.root, this.filePath,
                        this.includeRoot: true, this.extension: 'html', this.subpath,
                        this.template, this.ignoreMaster: false})
   : super(urlTemplate,
@@ -154,7 +154,7 @@ class ViewController extends app.Route implements RouteBuilder {
   responseType: responseType,
   statusCode: statusCode,
   allowMultipartRequest: allowMultipartRequest,
-  matchSubPaths: matchSubPaths);
+  encoding: encoding);
 
   String buildRoute(String urlPath, GroupController controllerGroup) {
     var root = buildRoot(controllerGroup);
@@ -187,7 +187,7 @@ class DefaultViewController extends app.DefaultRoute implements RouteBuilder {
 
   const DefaultViewController({List<String> methods: const [app.GET],
                               String responseType, int statusCode: 200,
-                              bool allowMultipartRequest: false, bool matchSubPaths: false, this.root,
+                              bool allowMultipartRequest: false, Encoding encoding: UTF8, this.root,
                               this.filePath, this.includeRoot: true, this.extension: 'html',
                               this.urlPosfix, this.template, this.ignoreMaster: false})
   : super(
@@ -195,7 +195,7 @@ class DefaultViewController extends app.DefaultRoute implements RouteBuilder {
       responseType: responseType,
       statusCode: statusCode,
       allowMultipartRequest: allowMultipartRequest,
-      matchSubPaths: matchSubPaths);
+      encoding: encoding);
 
   String buildRoute(String urlPath, GroupController controllerGroup) {
     var root = buildRoot(controllerGroup);
