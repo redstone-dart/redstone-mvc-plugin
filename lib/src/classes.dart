@@ -15,7 +15,7 @@ class MvcConfig {
       this.projectRoot: "/web"});
 
   Future<Template> get template async {
-    var route = "$masterLocation.$extension";
+    var route = "$projectRoot$masterLocation.$extension";
     var html = await new File(path.current + route).readAsString();
     //Define template/object
     return new Template(html, lenient: true);
