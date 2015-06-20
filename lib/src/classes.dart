@@ -7,10 +7,12 @@ class Root {
 }
 
 class MvcConfig {
-  final String masterLocation;
-  final String extension;
+  String masterLocation;
+  String extension;
+  String projectRoot;
 
-  MvcConfig({this.masterLocation: '/lib/views/master', this.extension: 'html'});
+  MvcConfig({this.masterLocation: '/html/master', this.extension: 'html',
+      this.projectRoot: "/web"});
 
   Future<Template> get template async {
     var route = "$masterLocation.$extension";
@@ -20,16 +22,7 @@ class MvcConfig {
   }
 }
 
-MvcConfig _config = null;
-bool _configSet = false;
-
-MvcConfig get config => _config;
-void set config(MvcConfig conf) {
-  if (_configSet) throw new StateError('Can only set "config" once');
-
-  _configSet = true;
-  _config = conf;
-}
+final MvcConfig config = new MvcConfig();
 
 abstract class Renderable {
   Object get model;
@@ -162,13 +155,16 @@ class ViewController extends app.Route implements RouteBuilder {
   }
 
   String buildRoot(GroupController controllerGroup) {
-    return !includeRoot
-        ? ''
-        : this.root != null
-            ? this.root
-            : controllerGroup != null && controllerGroup.root != null
-                ? controllerGroup.root
-                : '';
+    if (!includeRoot) return '';
+
+    var projectRoot = config.projectRoot != null ? config.projectRoot : '';
+    var routeRoot = this.root != null
+        ? this.root
+        : controllerGroup != null && controllerGroup.root != null
+            ? controllerGroup.root
+            : '';
+
+    return projectRoot + routeRoot;
   }
 }
 
@@ -231,13 +227,16 @@ class DefaultViewController extends app.DefaultRoute implements RouteBuilder {
   }
 
   String buildRoot(GroupController controllerGroup) {
-    return !includeRoot
-        ? ''
-        : this.root != null
-            ? this.root
-            : controllerGroup != null && controllerGroup.root != null
-                ? controllerGroup.root
-                : '';
+    if (!includeRoot) return '';
+
+    var projectRoot = config.projectRoot != null ? config.projectRoot : '';
+    var routeRoot = this.root != null
+        ? this.root
+        : controllerGroup != null && controllerGroup.root != null
+            ? controllerGroup.root
+            : '';
+
+    return projectRoot + routeRoot;
   }
 }
 
