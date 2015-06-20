@@ -10,7 +10,7 @@ class MvcConfig {
   final String masterLocation;
   final String extension;
 
-  MvcConfig ({this.masterLocation: '/lib/views/master', this.extension: 'html'});
+  MvcConfig({this.masterLocation: '/lib/views/master', this.extension: 'html'});
 
   Future<Template> get template async {
     var route = "$masterLocation.$extension";
@@ -23,11 +23,9 @@ class MvcConfig {
 MvcConfig _config = null;
 bool _configSet = false;
 
-
 MvcConfig get config => _config;
-void set config (MvcConfig conf) {
-  if (_configSet)
-    throw new StateError('Can only set "config" once');
+void set config(MvcConfig conf) {
+  if (_configSet) throw new StateError('Can only set "config" once');
 
   _configSet = true;
   _config = conf;
@@ -82,8 +80,8 @@ class Model_StringTemplate implements Renderable {
   Model_StringTemplate(this.model, this.stringTemplate);
 
   Future<Template> template(
-      RouteBuilder routeBuilder, GroupController controllerGroup) async =>
-  new Template(stringTemplate, lenient: true);
+          RouteBuilder routeBuilder, GroupController controllerGroup) async =>
+      new Template(stringTemplate, lenient: true);
 }
 
 class Model_Template implements Renderable {
@@ -93,8 +91,8 @@ class Model_Template implements Renderable {
   Model_Template(this.model, this.template_);
 
   Future<Template> template(
-      RouteBuilder routeBuilder, GroupController controllerGroup) async =>
-  template_;
+          RouteBuilder routeBuilder, GroupController controllerGroup) async =>
+      template_;
 }
 
 abstract class RouteBuilder {
@@ -105,33 +103,31 @@ abstract class RouteBuilder {
 }
 
 class DataController extends app.Route {
-
   const DataController(String urlTemplate,
-                       {List<String> methods: const [app.GET], String responseType,
-                       int statusCode: 200, bool allowMultipartRequest: false,
-                       Encoding encoding: UTF8, String root,
-                       String filePath, includeRoot: true, String extension: 'html',
-                       String subpath, String template})
-  : super(urlTemplate,
-  methods: methods,
-  responseType: responseType,
-  statusCode: statusCode,
-  allowMultipartRequest: allowMultipartRequest,
-  encoding: encoding);
+      {List<String> methods: const [app.GET], String responseType,
+      int statusCode: 200, bool allowMultipartRequest: false,
+      Encoding encoding: UTF8, String root, String filePath, includeRoot: true,
+      String extension: 'html', String subpath, String template})
+      : super(urlTemplate,
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
+          encoding: encoding);
 }
 
 class DefaultDataController extends app.DefaultRoute {
   const DefaultDataController({List<String> methods: const [app.GET],
-                              String responseType, int statusCode: 200,
-                              bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-                              String filePath, includeRoot: true, String extension: 'html',
-                              String subpath, String template})
-  : super(
-      methods: methods,
-      responseType: responseType,
-      statusCode: statusCode,
-      allowMultipartRequest: allowMultipartRequest,
-      encoding: encoding);
+      String responseType, int statusCode: 200,
+      bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
+      String filePath, includeRoot: true, String extension: 'html',
+      String subpath, String template})
+      : super(
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
+          encoding: encoding);
 }
 
 class ViewController extends app.Route implements RouteBuilder {
@@ -144,36 +140,64 @@ class ViewController extends app.Route implements RouteBuilder {
   final bool ignoreMaster;
 
   const ViewController(String urlTemplate,
-                       {List<String> methods: const [app.GET], String responseType,
-                       int statusCode: 200, bool allowMultipartRequest: false,
-                       Encoding encoding: UTF8, this.root, this.filePath,
-                       this.includeRoot: true, this.extension: 'html', this.subpath,
-                       this.template, this.ignoreMaster: false})
-  : super(urlTemplate,
-  methods: methods,
-  responseType: responseType,
-  statusCode: statusCode,
-  allowMultipartRequest: allowMultipartRequest,
-  encoding: encoding);
+      {List<String> methods: const [app.GET], String responseType,
+      int statusCode: 200, bool allowMultipartRequest: false,
+      Encoding encoding: UTF8, this.root, this.filePath, this.includeRoot: true,
+      this.extension: 'html', this.subpath, this.template,
+      this.ignoreMaster: false})
+      : super(urlTemplate,
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
+          encoding: encoding);
 
   String buildRoute(String urlPath, GroupController controllerGroup) {
     var root = buildRoot(controllerGroup);
     var posfix = subpath != null ? subpath : '';
 
     return filePath != null
-    ? '$root$filePath.$extension'
-    : '$root$urlPath$posfix.$extension';
+        ? '$root$filePath.$extension'
+        : '$root$urlPath$posfix.$extension';
   }
 
   String buildRoot(GroupController controllerGroup) {
     return !includeRoot
-    ? ''
-    : this.root != null
-    ? this.root
-    : controllerGroup != null && controllerGroup.root != null
-    ? controllerGroup.root
-    : '';
+        ? ''
+        : this.root != null
+            ? this.root
+            : controllerGroup != null && controllerGroup.root != null
+                ? controllerGroup.root
+                : '';
   }
+}
+
+class Controller extends app.Route {
+  const Controller(String urlTemplate, {List<String> methods: const [app.GET],
+      String responseType, int statusCode: 200,
+      bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
+      String filePath, bool includeRoot: true, String extension: 'html',
+      String urlPosfix, String template, bool ignoreMaster: false})
+      : super(urlTemplate,
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
+          encoding: encoding);
+}
+
+class DefaultController extends app.DefaultRoute {
+  const DefaultController({List<String> methods: const [app.GET],
+      String responseType, int statusCode: 200,
+      bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
+      String filePath, bool includeRoot: true, String extension: 'html',
+      String urlPosfix, String template, bool ignoreMaster: false})
+      : super(
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
+          encoding: encoding);
 }
 
 class DefaultViewController extends app.DefaultRoute implements RouteBuilder {
@@ -186,39 +210,40 @@ class DefaultViewController extends app.DefaultRoute implements RouteBuilder {
   final bool ignoreMaster;
 
   const DefaultViewController({List<String> methods: const [app.GET],
-                              String responseType, int statusCode: 200,
-                              bool allowMultipartRequest: false, Encoding encoding: UTF8, this.root,
-                              this.filePath, this.includeRoot: true, this.extension: 'html',
-                              this.urlPosfix, this.template, this.ignoreMaster: false})
-  : super(
-      methods: methods,
-      responseType: responseType,
-      statusCode: statusCode,
-      allowMultipartRequest: allowMultipartRequest,
-      encoding: encoding);
+      String responseType, int statusCode: 200,
+      bool allowMultipartRequest: false, Encoding encoding: UTF8, this.root,
+      this.filePath, this.includeRoot: true, this.extension: 'html',
+      this.urlPosfix, this.template, this.ignoreMaster: false})
+      : super(
+          methods: methods,
+          responseType: responseType,
+          statusCode: statusCode,
+          allowMultipartRequest: allowMultipartRequest,
+          encoding: encoding);
 
   String buildRoute(String urlPath, GroupController controllerGroup) {
     var root = buildRoot(controllerGroup);
     var posfix = urlPosfix != null ? urlPosfix : '';
 
     return filePath != null
-    ? '$root$filePath.$extension'
-    : '$root$urlPath$posfix.$extension';
+        ? '$root$filePath.$extension'
+        : '$root$urlPath$posfix.$extension';
   }
 
   String buildRoot(GroupController controllerGroup) {
     return !includeRoot
-    ? ''
-    : this.root != null
-    ? this.root
-    : controllerGroup != null && controllerGroup.root != null
-    ? controllerGroup.root
-    : '';
+        ? ''
+        : this.root != null
+            ? this.root
+            : controllerGroup != null && controllerGroup.root != null
+                ? controllerGroup.root
+                : '';
   }
 }
 
 class GroupController extends app.Group {
   final String root;
   final bool ignoreMaster;
-  const GroupController(String urlPrefix, {this.root, this.ignoreMaster: false}) : super(urlPrefix);
+  const GroupController(String urlPrefix, {this.root, this.ignoreMaster: false})
+      : super(urlPrefix);
 }
