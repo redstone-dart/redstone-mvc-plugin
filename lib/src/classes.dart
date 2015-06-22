@@ -38,7 +38,7 @@ class Model_RouteBuilder implements Renderable {
 
   Future<Template> template(
       RouteBuilder _, GroupController controllerGroup) async {
-    var route = routeBuilder.buildRoute(app.request.url.path, controllerGroup);
+    var route = routeBuilder.buildRoute(app.request.requestedUri.path, controllerGroup);
     //Get html file
     var html = await new File(path.current + route).readAsString();
     //Define template/object
