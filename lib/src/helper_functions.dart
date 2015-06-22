@@ -20,13 +20,10 @@ makeViewControllerResponse(value, RouteBuilder routeBuilder) async {
 
   Renderable renderable;
 
-
   if (routeBuilder.template != null) {
     renderable = new Model_StringTemplate(model, routeBuilder.template);
-
   } else if (value is! Renderable) {
     renderable = new Model_RouteBuilder(model, routeBuilder);
-
   } else {
     renderable = value;
   }
@@ -35,10 +32,12 @@ makeViewControllerResponse(value, RouteBuilder routeBuilder) async {
 
   //Render template with encoded object
   var map = model is Map ? model : encode(model);
-  var renderedTemplate = template.renderString (map);
+  var renderedTemplate = template.renderString(map);
 
   //Render into master template
-  if (config != null && (controllerGroup == null || !controllerGroup.ignoreMaster) && !routeBuilder.ignoreMaster) {
+  if (config != null &&
+      (controllerGroup == null || !controllerGroup.ignoreMaster) &&
+      !routeBuilder.ignoreMaster) {
     Template masterTemplate = await config.template;
     renderedTemplate = masterTemplate.renderString({'view': renderedTemplate});
   }
@@ -50,10 +49,35 @@ makeDataControllerResponse(value) {
   if (value == null || value is shelf.Response) {
     return value;
   }
-  var model = value is Renderable? value.model: value;
-  var map = model is Map? model: encode(model);
+  var model = value is Renderable ? value.model : value;
+  var map = model is Map ? model : encode(model);
 
   return map;
 }
 
+String buildViewControllersRoute(IViewController controller,
+    GroupController groupController) {
+  var extension = controller.extension;
+  var filePath = controller.filePath;
+  var root = buildViewControllersRoot(controller, groupController);
+  var subpath = controller.subpath != null ? controller.subpath : '';
+  var groupPath = groupController.urlPrefix;
+  var localPath = controller.buildLocalPath;
 
+  return filePath != null
+      ? '$root$filePath.$extension'
+      : '$root$groupPath$localPath$subpath.$extension';
+}
+
+String buildViewControllersRoot(IViewController controller, GroupController controllerGroup) {
+  if (!controller.includeRoot) return '';
+
+  var projectRoot = config != null && config.projectRoot != null ? config.projectRoot : '';
+  var routeRoot = controller.root != null
+      ? controller.root
+      : controllerGroup != null && controllerGroup.root != null
+          ? controllerGroup.root
+          : '';
+
+  return projectRoot + routeRoot;
+}
