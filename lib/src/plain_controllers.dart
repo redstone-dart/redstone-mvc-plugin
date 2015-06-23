@@ -6,7 +6,7 @@ class Controller extends app.Route {
   String responseType, int statusCode: 200,
   bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
   String filePath, bool includeRoot: true, String extension: 'html',
-  String urlPosfix, String template, bool ignoreMaster: false, String localPath})
+  String subpath, String template, bool ignoreMaster: false, String localPath})
   : super(urlTemplate,
   methods: methods,
   responseType: responseType,
@@ -20,7 +20,7 @@ class DefaultController extends app.DefaultRoute {
                           String responseType, int statusCode: 200,
                           bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
                           String filePath, bool includeRoot: true, String extension: 'html',
-                          String urlPosfix, String template, bool ignoreMaster: false, String localPath})
+                          String subpath, String template, bool ignoreMaster: false, String localPath})
   : super(
       methods: methods,
       responseType: responseType,

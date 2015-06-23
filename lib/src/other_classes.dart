@@ -11,8 +11,8 @@ class MvcConfig {
   String extension;
   String projectRoot;
 
-  MvcConfig({this.masterLocation: '/html/master', this.extension: 'html',
-      this.projectRoot: "/web"});
+  MvcConfig({this.masterLocation: '/master', this.extension: 'html',
+      this.projectRoot: "/web/html"});
 
   Future<Template> get template async {
     var route = "$projectRoot$masterLocation.$extension";
