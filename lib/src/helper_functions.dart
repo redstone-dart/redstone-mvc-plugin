@@ -13,17 +13,17 @@ makeViewControllerResponse(value, RouteBuilder routeBuilder) async {
   }
 
   //Get ViewGroup
-  GroupController controllerGroup = app.request.attributes.controllerGroup__;
+  Controller controllerGroup = app.request.attributes.controllerGroup__;
 
   //Get model
-  Object model = value is Renderable ? value.model : value;
+  Object model = value is ViewBuilder ? value.model : value;
 
-  Renderable renderable;
+  ViewBuilder renderable;
 
   if (routeBuilder.template != null) {
-    renderable = new Model_StringTemplate(model, routeBuilder.template);
-  } else if (value is! Renderable) {
-    renderable = new Model_RouteBuilder(model, routeBuilder);
+    renderable = new ViewStringBuilder(routeBuilder.template, model: model);
+  } else if (value is! ViewBuilder) {
+    renderable = new ViewRouteBuilder(routeBuilder, model: model);
   } else {
     renderable = value;
   }
@@ -49,14 +49,14 @@ makeDataControllerResponse(value) {
   if (value == null || value is shelf.Response) {
     return value;
   }
-  var model = value is Renderable ? value.model : value;
+  var model = value is ViewBuilder ? value.model : value;
   var map = model is Map ? model : encode(model);
 
   return map;
 }
 
 String buildViewControllersRoute(IViewController controller,
-    GroupController groupController) {
+    Controller groupController) {
   var extension = controller.extension;
   var filePath = controller.filePath;
   var root = buildViewControllersRoot(controller, groupController);
@@ -69,7 +69,7 @@ String buildViewControllersRoute(IViewController controller,
       : '$root$groupPath$localPath$subpath.$extension';
 }
 
-String buildViewControllersRoot(IViewController controller, GroupController controllerGroup) {
+String buildViewControllersRoot(IViewController controller, Controller controllerGroup) {
   if (!controller.includeRoot) return '';
 
   var projectRoot = config != null && config.projectRoot != null ? config.projectRoot : '';

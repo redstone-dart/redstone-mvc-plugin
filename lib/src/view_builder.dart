@@ -1,19 +1,19 @@
 part of redstone.mvc;
 
-abstract class Renderable {
+abstract class ViewBuilder {
   Object get model;
   Future<Template> template(
-      RouteBuilder routeBuilder, GroupController controllerGroup);
+      RouteBuilder routeBuilder, Controller controllerGroup);
 }
 
-class Model_ViewController implements Renderable {
+class ViewControllerBuilder implements ViewBuilder {
   final Object model;
   final IViewController viewController;
 
-  Model_ViewController(this.model, this.viewController);
+  ViewControllerBuilder(this.model, this.viewController);
 
   Future<Template> template(
-      RouteBuilder _, GroupController controllerGroup) async {
+      RouteBuilder _, Controller controllerGroup) async {
     var route = buildViewControllersRoute(viewController, controllerGroup);
     //Get html file
     var html = await new File(path.current + route).readAsString();
@@ -22,14 +22,14 @@ class Model_ViewController implements Renderable {
   }
 }
 
-class Model_RouteBuilder implements Renderable {
+class ViewRouteBuilder implements ViewBuilder {
   final Object model;
   final RouteBuilder viewController;
 
-  Model_RouteBuilder(this.model, this.viewController);
+  ViewRouteBuilder(this.viewController, {this.model: const {}});
 
   Future<Template> template(
-      RouteBuilder _, GroupController controllerGroup) async {
+      RouteBuilder _, Controller controllerGroup) async {
     var route = viewController.buildRoute(app.request.requestedUri.path, controllerGroup);
     //Get html file
     var html = await new File(path.current + route).readAsString();
@@ -38,17 +38,17 @@ class Model_RouteBuilder implements Renderable {
   }
 }
 
-class Model_Path implements Renderable {
+class ViewPath implements ViewBuilder {
   final String filePath;
   final String extension;
   final Object model;
 
-  Model_Path(this.model, this.filePath, {this.extension: 'html'});
+  ViewPath(this.filePath, {this.model: const {}, this.extension: 'html'});
 
   String get completeFilePath => '$filePath.$extension';
 
   Future<Template> template(
-      RouteBuilder routeBuilder, GroupController controllerGroup) async {
+      RouteBuilder routeBuilder, Controller controllerGroup) async {
     var root = routeBuilder.buildRoot(controllerGroup);
     var filePath = root + completeFilePath;
     //Get html file
@@ -58,24 +58,24 @@ class Model_Path implements Renderable {
   }
 }
 
-class Model_StringTemplate implements Renderable {
+class ViewStringBuilder implements ViewBuilder {
   final Object model;
   final String stringTemplate;
 
-  Model_StringTemplate(this.model, this.stringTemplate);
+  ViewStringBuilder(this.stringTemplate, {this.model: const {}});
 
   Future<Template> template(
-      RouteBuilder routeBuilder, GroupController controllerGroup) async =>
+      RouteBuilder routeBuilder, Controller controllerGroup) async =>
   new Template(stringTemplate, lenient: true);
 }
 
-class Model_Template implements Renderable {
+class ViewTemplateBuilder implements ViewBuilder {
   final Object model;
   final Template template_;
 
-  Model_Template(this.model, this.template_);
+  ViewTemplateBuilder(this.template_, {this.model: const {}});
 
   Future<Template> template(
-      RouteBuilder routeBuilder, GroupController controllerGroup) async =>
+      RouteBuilder routeBuilder, Controller controllerGroup) async =>
   template_;
 }

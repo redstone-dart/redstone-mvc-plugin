@@ -1,15 +1,10 @@
 part of redstone.mvc;
 
-class Root {
-  static const String bin = '/bin';
-  static const String lib = '/lib';
-  static const String web = '/web';
-}
 
 class MvcConfig {
-  String masterLocation;
-  String extension;
-  String projectRoot;
+  final String masterLocation;
+  final String extension;
+  final String projectRoot;
 
   MvcConfig({this.masterLocation: '/master', this.extension: 'html',
       this.projectRoot: "/web/html"});
@@ -23,8 +18,8 @@ class MvcConfig {
 }
 
 abstract class RouteBuilder {
-  String buildRoute(String urlPath, GroupController controllerGroup);
+  String buildRoute(String urlPath, Controller controllerGroup);
   String get template;
-  String buildRoot(GroupController controllerGroup);
+  String buildRoot(Controller controllerGroup);
   bool get ignoreMaster;
 }

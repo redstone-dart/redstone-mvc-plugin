@@ -17,7 +17,7 @@ part 'src/view_controllers.dart';
 part 'src/data_controllers.dart';
 part 'src/plain_controllers.dart';
 part 'src/group_controllers.dart';
-part 'src/renderables.dart';
+part 'src/view_builder.dart';
 
 
 MvcConfig config;
