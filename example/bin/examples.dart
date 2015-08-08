@@ -61,7 +61,7 @@ View() => new Example()
  * template file, you use `subpath` to complete the remaining parts. Setting
  * `subpath` will have no effect if you specified `filePath`.
  */
-@mvc.View('/example/lib', subpath: '/template')
+@mvc.View('/example/lib', viewSubPath: '/template')
 subPath() => new Example()
   ..title = "Using subpath"
   ..description = "Just appends to the path";

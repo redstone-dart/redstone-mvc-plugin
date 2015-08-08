@@ -4,8 +4,8 @@ class Json extends app.Route {
   const Json(String urlTemplate, {List<String> methods: const [app.GET],
       String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, includeRoot: true, String extension: 'html',
-      String subpath, String template, String localPath, bool ignoreMaster})
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath,  String template, String localPath, bool ignoreMaster})
       : super(urlTemplate,
           methods: methods,
           responseType: responseType,
@@ -18,7 +18,7 @@ class DefaultJson extends app.DefaultRoute {
   const DefaultJson({List<String> methods: const [app.GET], String responseType,
       int statusCode: 200, bool allowMultipartRequest: false,
       Encoding encoding: UTF8, String root, String filePath, includeRoot: true,
-      String extension: 'html', String subpath, String template, bool ignoreMaster,
+      String extension: 'html', String viewSubPath, String viewLocalPath,  String template, bool ignoreMaster,
       String localPath})
       : super(
           methods: methods,
@@ -31,8 +31,8 @@ class DefaultJson extends app.DefaultRoute {
 class GetJson extends Json {
   const GetJson(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
           methods: const [app.GET],
@@ -42,9 +42,8 @@ class GetJson extends Json {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
           ignoreMaster: ignoreMaster,
           localPath: localPath);
@@ -54,8 +53,8 @@ class GetJson extends Json {
 class DefaultGetJson extends DefaultJson {
   const DefaultGetJson({String responseType, int statusCode: 200,
                        bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-                       String filePath, bool includeRoot: true, String extension: 'html',
-                       String subpath, String template, bool ignoreMaster: false,
+                       String filePath, String extension: 'html',
+                       String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
                        String localPath})
   : super(
       methods: const [app.GET],
@@ -65,9 +64,8 @@ class DefaultGetJson extends DefaultJson {
       encoding: encoding,
       root: root,
       filePath: filePath,
-      includeRoot: includeRoot,
       extension: extension,
-      subpath: subpath,
+      viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
       template: template,
       ignoreMaster: ignoreMaster,
       localPath: localPath);
@@ -76,8 +74,8 @@ class DefaultGetJson extends DefaultJson {
 class PostJson extends Json {
   const PostJson(String urlTemplate, {String responseType, int statusCode: 200,
   bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-  String filePath, bool includeRoot: true, String extension: 'html',
-  String subpath, String template, bool ignoreMaster: false,
+  String filePath, String extension: 'html',
+  String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
   String localPath})
   : super(urlTemplate,
   methods: const [app.POST],
@@ -87,9 +85,8 @@ class PostJson extends Json {
   encoding: encoding,
   root: root,
   filePath: filePath,
-  includeRoot: includeRoot,
   extension: extension,
-  subpath: subpath,
+  viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
   template: template,
   ignoreMaster: ignoreMaster,
   localPath: localPath);
@@ -98,8 +95,8 @@ class PostJson extends Json {
 class DefaultPostJson extends DefaultJson {
   const DefaultPostJson({String responseType, int statusCode: 200,
                         bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-                        String filePath, bool includeRoot: true, String extension: 'html',
-                        String subpath, String template, bool ignoreMaster: false,
+                        String filePath, String extension: 'html',
+                        String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
                         String localPath})
   : super(
       methods: const [app.POST],
@@ -109,9 +106,8 @@ class DefaultPostJson extends DefaultJson {
       encoding: encoding,
       root: root,
       filePath: filePath,
-      includeRoot: includeRoot,
       extension: extension,
-      subpath: subpath,
+      viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
       template: template,
       ignoreMaster: ignoreMaster,
       localPath: localPath);
@@ -120,8 +116,8 @@ class DefaultPostJson extends DefaultJson {
 class PutJson extends Json {
   const PutJson(String urlTemplate, {String responseType, int statusCode: 200,
   bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-  String filePath, bool includeRoot: true, String extension: 'html',
-  String subpath, String template, bool ignoreMaster: false,
+  String filePath, String extension: 'html',
+  String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
   String localPath})
   : super(urlTemplate,
   methods: const [app.PUT],
@@ -131,9 +127,8 @@ class PutJson extends Json {
   encoding: encoding,
   root: root,
   filePath: filePath,
-  includeRoot: includeRoot,
   extension: extension,
-  subpath: subpath,
+  viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
   template: template,
   ignoreMaster: ignoreMaster,
   localPath: localPath);
@@ -142,8 +137,8 @@ class PutJson extends Json {
 class DefaultPutJson extends DefaultJson {
   const DefaultPutJson({String responseType, int statusCode: 200,
                        bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-                       String filePath, bool includeRoot: true, String extension: 'html',
-                       String subpath, String template, bool ignoreMaster: false,
+                       String filePath, String extension: 'html',
+                       String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
                        String localPath})
   : super(
       methods: const [app.PUT],
@@ -153,9 +148,8 @@ class DefaultPutJson extends DefaultJson {
       encoding: encoding,
       root: root,
       filePath: filePath,
-      includeRoot: includeRoot,
       extension: extension,
-      subpath: subpath,
+      viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
       template: template,
       ignoreMaster: ignoreMaster,
       localPath: localPath);
@@ -165,7 +159,7 @@ class DeleteJson extends Json {
   const DeleteJson(String urlTemplate, {String responseType,
   int statusCode: 200, bool allowMultipartRequest: false,
   Encoding encoding: UTF8, String root, String filePath,
-  bool includeRoot: true, String extension: 'html', String subpath,
+  String extension: 'html', String viewSubPath, String viewLocalPath,
   String template, bool ignoreMaster: false, String localPath})
   : super(urlTemplate,
   methods: const [app.DELETE],
@@ -175,9 +169,8 @@ class DeleteJson extends Json {
   encoding: encoding,
   root: root,
   filePath: filePath,
-  includeRoot: includeRoot,
   extension: extension,
-  subpath: subpath,
+  viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
   template: template,
   ignoreMaster: ignoreMaster,
   localPath: localPath);
@@ -186,8 +179,8 @@ class DeleteJson extends Json {
 class DefaultDeleteJson extends DefaultJson {
   const DefaultDeleteJson({String responseType, int statusCode: 200,
                           bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-                          String filePath, bool includeRoot: true, String extension: 'html',
-                          String subpath, String template, bool ignoreMaster: false,
+                          String filePath, String extension: 'html',
+                          String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
                           String localPath})
   : super(
       methods: const [app.DELETE],
@@ -197,9 +190,8 @@ class DefaultDeleteJson extends DefaultJson {
       encoding: encoding,
       root: root,
       filePath: filePath,
-      includeRoot: includeRoot,
       extension: extension,
-      subpath: subpath,
+      viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
       template: template,
       ignoreMaster: ignoreMaster,
       localPath: localPath);

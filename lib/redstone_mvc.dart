@@ -19,6 +19,9 @@ part 'src/plain_controllers.dart';
 part 'src/group_controllers.dart';
 part 'src/view_builder.dart';
 
+MvcConfig _config;
 
-MvcConfig config;
+configureMvc([MvcConfig config]) {
+  _config = config != null? config: new MvcConfig();
+}
 

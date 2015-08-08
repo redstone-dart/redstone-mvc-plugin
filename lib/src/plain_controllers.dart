@@ -4,7 +4,7 @@ class Action extends app.Route {
   const Action(String urlTemplate, {List<String> methods: const [app.GET],
       String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
+      String filePath, String extension: 'html',
       String subpath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
@@ -19,7 +19,7 @@ class DefaultAction extends app.DefaultRoute {
   const DefaultAction({List<String> methods: const [app.GET],
       String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
+      String filePath, String extension: 'html',
       String subpath, String template, bool ignoreMaster: false,
       String localPath})
       : super(
@@ -33,7 +33,7 @@ class DefaultAction extends app.DefaultRoute {
 class Get extends Action {
   const Get(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
+      String filePath, String extension: 'html',
       String subpath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
@@ -48,7 +48,7 @@ class DefaultGet extends DefaultAction {
   const DefaultGet({List<String> methods: const [app.GET], String responseType,
       int statusCode: 200, bool allowMultipartRequest: false,
       Encoding encoding: UTF8, String root, String filePath,
-      bool includeRoot: true, String extension: 'html', String subpath,
+      String extension: 'html', String subpath,
       String template, bool ignoreMaster: false, String localPath})
       : super(
           methods: const [app.GET],
@@ -61,8 +61,8 @@ class DefaultGet extends DefaultAction {
 class Post extends Action {
   const Post(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
           methods: const [app.POST],
@@ -76,7 +76,7 @@ class DefaultPost extends DefaultAction {
   const DefaultPost({List<String> methods: const [app.GET], String responseType,
       int statusCode: 200, bool allowMultipartRequest: false,
       Encoding encoding: UTF8, String root, String filePath,
-      bool includeRoot: true, String extension: 'html', String subpath,
+      String extension: 'html', String viewSubPath, String viewLocalPath,
       String template, bool ignoreMaster: false, String localPath})
       : super(
           methods: const [app.POST],
@@ -89,8 +89,8 @@ class DefaultPost extends DefaultAction {
 class Put extends Action {
   const Put(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
           methods: const [app.PUT],
@@ -104,7 +104,7 @@ class DefaultPut extends DefaultAction {
   const DefaultPut({List<String> methods: const [app.GET], String responseType,
       int statusCode: 200, bool allowMultipartRequest: false,
       Encoding encoding: UTF8, String root, String filePath,
-      bool includeRoot: true, String extension: 'html', String subpath,
+      String extension: 'html', String viewSubPath, String viewLocalPath,
       String template, bool ignoreMaster: false, String localPath})
       : super(
           methods: const [app.PUT],
@@ -117,8 +117,8 @@ class DefaultPut extends DefaultAction {
 class Delete extends Action {
   const Delete(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
           methods: const [app.DELETE],
@@ -132,8 +132,8 @@ class DefaultDelete extends DefaultAction {
   const DefaultDelete({List<String> methods: const [app.GET],
       String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(
           methods: const [app.DELETE],

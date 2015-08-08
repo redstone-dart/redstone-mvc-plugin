@@ -1,32 +1,32 @@
 part of redstone.mvc;
 
-abstract class IViewController {
+abstract class ViewAction {
   String get root;
   String get filePath;
-  bool get includeRoot;
   String get extension;
-  String get subpath;
+  String get viewSubPath;
+  String get viewLocalPath;
   String get template;
-  bool get ignoreMaster;
   String get localPath;
-  String get buildLocalPath;
+  bool get ignoreMaster;
 }
 
-class View extends app.Route implements RouteBuilder, IViewController {
+class View extends app.Route implements RouteBuilder, ViewAction {
   final String root;
   final String filePath;
-  final bool includeRoot;
   final String extension;
-  final String subpath;
+  final String viewSubPath;
+  final String viewLocalPath;
   final String template;
   final bool ignoreMaster;
-  final String localPath;
+
+  String get localPath => viewLocalPath != null? viewLocalPath: urlTemplate;
 
   const View(String urlTemplate, {List<String> methods: const [app.GET],
       String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, this.root,
-      this.filePath, this.includeRoot: true, this.extension: 'html',
-      this.subpath, this.template, this.ignoreMaster: false, this.localPath})
+      this.filePath, this.extension: 'html',
+      this.viewSubPath, this.template, this.ignoreMaster: false, this.viewLocalPath})
       : super(urlTemplate,
           methods: methods,
           responseType: responseType,
@@ -39,28 +39,27 @@ class View extends app.Route implements RouteBuilder, IViewController {
   }
 
   String buildRoot(Controller groupController) {
-    return buildViewControllersRoot(this, groupController);
+    return buildActionRoot(this, groupController);
   }
-
-  String get buildLocalPath => localPath != null ? localPath : urlTemplate;
 }
 
 class DefaultView extends app.DefaultRoute
-    implements RouteBuilder, IViewController {
+    implements RouteBuilder, ViewAction {
   final String root;
   final String filePath;
-  final bool includeRoot;
   final String extension;
-  final String subpath;
+  final String viewSubPath;
+  final String viewLocalPath;
   final String template;
   final bool ignoreMaster;
-  final String localPath;
+
+  String get localPath => viewLocalPath != null? viewLocalPath: '';
 
   const DefaultView({List<String> methods: const [app.GET], String responseType,
       int statusCode: 200, bool allowMultipartRequest: false,
-      Encoding encoding: UTF8, this.root, this.filePath, this.includeRoot: true,
-      this.extension: 'html', this.subpath, this.template,
-      this.ignoreMaster: false, this.localPath})
+      Encoding encoding: UTF8, this.root, this.filePath,
+      this.extension: 'html', this.viewSubPath, this.viewLocalPath, this.template,
+      this.ignoreMaster: false})
       : super(
           methods: methods,
           responseType: responseType,
@@ -73,7 +72,7 @@ class DefaultView extends app.DefaultRoute
   }
 
   String buildRoot(Controller groupController) {
-    return buildViewControllersRoot(this, groupController);
+    return buildActionRoot(this, groupController);
   }
 
   String get buildLocalPath => localPath != null ? localPath : '';
@@ -82,8 +81,8 @@ class DefaultView extends app.DefaultRoute
 class GetView extends View {
   const GetView(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
           methods: const [app.GET],
@@ -93,19 +92,19 @@ class GetView extends View {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
-          ignoreMaster: ignoreMaster,
-          localPath: localPath);
+          ignoreMaster: ignoreMaster);
 }
 
 class DefaultGetView extends DefaultView {
+
+
   const DefaultGetView({String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(
           methods: const [app.GET],
@@ -115,19 +114,17 @@ class DefaultGetView extends DefaultView {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
-          ignoreMaster: ignoreMaster,
-          localPath: localPath);
+          ignoreMaster: ignoreMaster);
 }
 
 class PostView extends View {
   const PostView(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
           methods: const [app.POST],
@@ -137,19 +134,17 @@ class PostView extends View {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
-          ignoreMaster: ignoreMaster,
-          localPath: localPath);
+          ignoreMaster: ignoreMaster);
 }
 
 class DefaultPostView extends DefaultView {
   const DefaultPostView({String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(
           methods: const [app.POST],
@@ -159,19 +154,17 @@ class DefaultPostView extends DefaultView {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
-          ignoreMaster: ignoreMaster,
-          localPath: localPath);
+          ignoreMaster: ignoreMaster);
 }
 
 class PutView extends View {
   const PutView(String urlTemplate, {String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(urlTemplate,
           methods: const [app.PUT],
@@ -181,19 +174,17 @@ class PutView extends View {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
-          ignoreMaster: ignoreMaster,
-          localPath: localPath);
+          ignoreMaster: ignoreMaster);
 }
 
 class DefaultPutView extends DefaultView {
   const DefaultPutView({String responseType, int statusCode: 200,
       bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-      String filePath, bool includeRoot: true, String extension: 'html',
-      String subpath, String template, bool ignoreMaster: false,
+      String filePath, String extension: 'html',
+      String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
       String localPath})
       : super(
           methods: const [app.PUT],
@@ -203,19 +194,17 @@ class DefaultPutView extends DefaultView {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
-          ignoreMaster: ignoreMaster,
-          localPath: localPath);
+          ignoreMaster: ignoreMaster);
 }
 
 class DeleteView extends View {
   const DeleteView(String urlTemplate, {String responseType,
       int statusCode: 200, bool allowMultipartRequest: false,
       Encoding encoding: UTF8, String root, String filePath,
-      bool includeRoot: true, String extension: 'html', String subpath,
+      String extension: 'html', String viewSubPath, String viewLocalPath,
       String template, bool ignoreMaster: false, String localPath})
       : super(urlTemplate,
           methods: const [app.DELETE],
@@ -225,19 +214,20 @@ class DeleteView extends View {
           encoding: encoding,
           root: root,
           filePath: filePath,
-          includeRoot: includeRoot,
           extension: extension,
-          subpath: subpath,
+          viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
           template: template,
-          ignoreMaster: ignoreMaster,
-          localPath: localPath);
+          ignoreMaster: ignoreMaster);
 }
 
 class DefaultDeleteView extends DefaultView {
+
+  final localPath = '';
+
   const DefaultDeleteView({String responseType, int statusCode: 200,
                        bool allowMultipartRequest: false, Encoding encoding: UTF8, String root,
-                       String filePath, bool includeRoot: true, String extension: 'html',
-                       String subpath, String template, bool ignoreMaster: false,
+                       String filePath, String extension: 'html',
+                       String viewSubPath, String viewLocalPath, String template, bool ignoreMaster: false,
                        String localPath})
   : super(
       methods: const [app.DELETE],
@@ -247,10 +237,8 @@ class DefaultDeleteView extends DefaultView {
       encoding: encoding,
       root: root,
       filePath: filePath,
-      includeRoot: includeRoot,
       extension: extension,
-      subpath: subpath,
+      viewSubPath: viewSubPath, viewLocalPath: viewLocalPath,
       template: template,
-      ignoreMaster: ignoreMaster,
-      localPath: localPath);
+      ignoreMaster: ignoreMaster);
 }

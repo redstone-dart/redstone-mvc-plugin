@@ -43,7 +43,7 @@ void mvcPluggin(app.Manager manager) {
   for (var viewType in viewTypes) {
     manager.addResponseProcessor(viewType,
         (dynamic metadata, handlerName, value, injector) async {
-      return makeViewControllerResponse(value, metadata);
+      return makeViewResponse(value, metadata);
     });
   }
 
@@ -51,7 +51,7 @@ void mvcPluggin(app.Manager manager) {
   for (var jsonType in jsonTypes) {
     manager.addResponseProcessor(jsonType,
         (type, handlerName, value, injector) async {
-      return makeDataControllerResponse(value);
+      return makeJsonResponse(value);
     });
   }
 }

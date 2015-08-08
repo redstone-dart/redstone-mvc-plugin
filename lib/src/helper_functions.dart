@@ -1,6 +1,6 @@
 part of redstone.mvc;
 
-makeViewControllerResponse(value, RouteBuilder routeBuilder) async {
+makeViewResponse(value, RouteBuilder routeBuilder) async {
   if (value == null || value is shelf.Response) {
     return value;
   }
@@ -13,7 +13,7 @@ makeViewControllerResponse(value, RouteBuilder routeBuilder) async {
   }
 
   //Get ViewGroup
-  Controller controllerGroup = app.request.attributes.controllerGroup__;
+  Controller controller = app.request.attributes.controllerGroup__;
 
   //Get model
   Object model = value is ViewBuilder ? value.model : value;
@@ -21,31 +21,29 @@ makeViewControllerResponse(value, RouteBuilder routeBuilder) async {
   ViewBuilder renderable;
 
   if (routeBuilder.template != null) {
-    renderable = new ViewStringBuilder(routeBuilder.template, model: model);
+    renderable = new ViewString(routeBuilder.template, model: model);
   } else if (value is! ViewBuilder) {
     renderable = new ViewRouteBuilder(routeBuilder, model: model);
   } else {
     renderable = value;
   }
 
-  Template template = await renderable.template(routeBuilder, controllerGroup);
+  Template template = await renderable.template(routeBuilder, controller);
 
   //Render template with encoded object
   var map = model is Map ? model : encode(model);
   var renderedTemplate = template.renderString(map);
 
   //Render into master template
-  if (config != null &&
-      (controllerGroup == null || !controllerGroup.ignoreMaster) &&
-      !routeBuilder.ignoreMaster) {
-    Template masterTemplate = await config.template;
+  if (controller != null && controller.includeMaster) {
+    Template masterTemplate = await controller.masterTemplate;
     renderedTemplate = masterTemplate.renderString({'view': renderedTemplate});
   }
 
   return new shelf.Response.ok(renderedTemplate, headers: headers);
 }
 
-makeDataControllerResponse(value) {
+makeJsonResponse(value) {
   if (value == null || value is shelf.Response) {
     return value;
   }
@@ -55,29 +53,34 @@ makeDataControllerResponse(value) {
   return map;
 }
 
-String buildViewControllersRoute(IViewController controller,
-    Controller groupController) {
-  var extension = controller.extension;
-  var filePath = controller.filePath;
-  var root = buildViewControllersRoot(controller, groupController);
-  var subpath = controller.subpath != null ? controller.subpath : '';
-  var groupPath = groupController.urlPrefix;
-  var localPath = controller.buildLocalPath;
+String buildViewControllersRoute(ViewAction action,
+    Controller controller) {
+  var extension = action.extension;
+  var filePath = action.filePath;
+  var root = buildActionRoot(action, controller);
+  var subpath = action.viewSubPath != null ? action.viewSubPath : '';
+  var groupPath = controller.urlPrefix;
+  var localPath = action.localPath;
 
   return filePath != null
-      ? '$root$filePath.$extension'
+      ? '$filePath.$extension'
       : '$root$groupPath$localPath$subpath.$extension';
 }
 
-String buildViewControllersRoot(IViewController controller, Controller controllerGroup) {
-  if (!controller.includeRoot) return '';
+String buildActionRoot(ViewAction action, Controller controller) {
 
-  var projectRoot = config != null && config.projectRoot != null ? config.projectRoot : '';
-  var routeRoot = controller.root != null
-      ? controller.root
-      : controllerGroup != null && controllerGroup.root != null
-          ? controllerGroup.root
-          : '';
+  var actionRoot = action.root != null
+      ? action.root : null;
 
-  return projectRoot + routeRoot;
+  return actionRoot != null? actionRoot: buildControllerRoot(controller);
+}
+
+String buildControllerRoot(Controller controllerGroup) {
+
+  var projectRoot = _config != null && _config.projectRoot != null ? _config.projectRoot : null;
+  var controllerRoot = controllerGroup != null && controllerGroup.root != null
+  ? controllerGroup.root
+  : null;
+
+  return controllerRoot != null? controllerRoot: projectRoot != null? projectRoot: '';
 }

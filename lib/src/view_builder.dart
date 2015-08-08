@@ -8,7 +8,7 @@ abstract class ViewBuilder {
 
 class ViewControllerBuilder implements ViewBuilder {
   final Object model;
-  final IViewController viewController;
+  final ViewAction viewController;
 
   ViewControllerBuilder(this.model, this.viewController);
 
@@ -58,22 +58,22 @@ class ViewPath implements ViewBuilder {
   }
 }
 
-class ViewStringBuilder implements ViewBuilder {
+class ViewString implements ViewBuilder {
   final Object model;
   final String stringTemplate;
 
-  ViewStringBuilder(this.stringTemplate, {this.model: const {}});
+  ViewString(this.stringTemplate, {this.model: const {}});
 
   Future<Template> template(
       RouteBuilder routeBuilder, Controller controllerGroup) async =>
   new Template(stringTemplate, lenient: true);
 }
 
-class ViewTemplateBuilder implements ViewBuilder {
+class ViewTemplate implements ViewBuilder {
   final Object model;
   final Template template_;
 
-  ViewTemplateBuilder(this.template_, {this.model: const {}});
+  ViewTemplate(this.template_, {this.model: const {}});
 
   Future<Template> template(
       RouteBuilder routeBuilder, Controller controllerGroup) async =>
