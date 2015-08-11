@@ -3,6 +3,7 @@ library redstone.mvc;
 import 'package:redstone/redstone.dart' as app;
 import 'package:redstone_mapper/mapper.dart';
 import 'package:redstone_mapper/mapper_factory.dart';
+import 'package:redstone_mapper/plugin.dart' show Decode;
 import 'package:path/path.dart' as path;
 import 'package:shelf/shelf.dart' as shelf;
 import 'dart:io';

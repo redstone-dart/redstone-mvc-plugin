@@ -63,16 +63,20 @@ String buildViewControllersRoute(ViewAction action,
   var localPath = action.localPath;
 
   return filePath != null
-      ? '$filePath.$extension'
+      ? '$root$filePath.$extension'
       : '$root$groupPath$localPath$subpath.$extension';
 }
 
 String buildActionRoot(ViewAction action, Controller controller) {
 
-  var actionRoot = action.root != null
-      ? action.root : null;
-
-  return actionRoot != null? actionRoot: buildControllerRoot(controller);
+  if (action.root == false)
+    return '';
+  else if (action.root is String)
+    return action.root;
+  else if (action.root == null)
+    return buildControllerRoot(controller);
+  else
+    throw new Exception("Root can only be either 'false', a 'String' or 'null', not '${action.root}' of type '${action.root.runtimeType}'");
 }
 
 String buildControllerRoot(Controller controllerGroup) {

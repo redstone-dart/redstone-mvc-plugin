@@ -1,14 +1,14 @@
 part of redstone.mvc;
 
 class Controller extends app.Group {
-  final String root;
+  final dynamic root;
   final String masterFilePath;
   final String masterExtension;
   final String masterSubpath;
   final bool useCustomMaster;
 
   const Controller(String urlPrefix, {this.useCustomMaster: false,
-      this.masterExtension: "html", this.masterFilePath, this.masterSubpath, this.root})
+      this.masterExtension: "mustache", this.masterFilePath, this.masterSubpath, this.root})
       : super(urlPrefix);
 
   String get masterRoute {

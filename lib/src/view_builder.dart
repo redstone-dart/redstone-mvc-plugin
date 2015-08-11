@@ -43,7 +43,7 @@ class ViewPath implements ViewBuilder {
   final String extension;
   final Object model;
 
-  ViewPath(this.filePath, {this.model: const {}, this.extension: 'html'});
+  ViewPath(this.filePath, {this.model: const {}, this.extension: 'mustache'});
 
   String get completeFilePath => '$filePath.$extension';
 
