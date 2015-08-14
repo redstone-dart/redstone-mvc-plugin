@@ -5,10 +5,10 @@ import 'dart:math' as math;
  * Use 'package:redstone_mvc/redstone_mvc.dart' if didn't clone
  * redstone_mvc but copied the 'examples' folder instead.
  */
-import '../../lib/redstone_mvc.dart' as mvc;
+import '../../lib/redstone_mvc.dart';
 
 main() {
-  app.addPlugin(mvc.mvcPluggin);
+  app.addPlugin(mvcPluggin);
 
   app.setupConsoleLog();
   app.start(port: 9090);
@@ -24,7 +24,7 @@ class Example {
  * a simple mustache template at route '/stringTemplate' using the information
  * from the [Example] instance returned by the route function [stringTemplate].
  */
-@mvc.View('/stringTemplate', template: '''
+@View('/stringTemplate', template: '''
   <div>
     <h2>{{title}}</h2>
     <p>{{description}}</p>
@@ -42,7 +42,7 @@ stringTemplate() => new Example()
  * In this example we are rendering the `/example/lib/template.html` on
  * route `/fileTemplate` using an [Example] instance as a model.
  */
-@mvc.View('/fileTemplate', filePath: '/example/lib/template')
+@View('/fileTemplate', filePath: '/example/lib/template')
 fileTemplate() => new Example()
   ..title = "MVC"
   ..description = "MVC is very easy with Redstone";
@@ -51,8 +51,8 @@ fileTemplate() => new Example()
  * If [filePath] and your route path match, you unspecify [filePath] and
  * View will use the route path to find your template file.
  */
-@mvc.View('/example/lib/template')
-View() => new Example()
+@View('/example/lib/template')
+view() => new Example()
   ..title = "MVC"
   ..description = "MVC is very easy with Redstone";
 
@@ -61,7 +61,7 @@ View() => new Example()
  * template file, you use `subpath` to complete the remaining parts. Setting
  * `subpath` will have no effect if you specified `filePath`.
  */
-@mvc.View('/example/lib', viewSubPath: '/template')
+@View('/example/lib', viewSubPath: '/template')
 subPath() => new Example()
   ..title = "Using subpath"
   ..description = "Just appends to the path";
@@ -71,8 +71,8 @@ subPath() => new Example()
  * prepend to both [filePath] and your route's path, depending on which
  * is used.
  */
-@mvc.View('/template', root: '/example/lib')
-ViewRoot() => new Example()
+@View('/template', root: '/example/lib')
+viewRoot() => new Example()
   ..title = "MVC"
   ..description = "MVC is very easy with Redstone";
 
@@ -84,14 +84,14 @@ ViewRoot() => new Example()
  * extends [Group] and takes the normal [urlPrefix] as first argument and an optional
  * [root] parameters.
  */
-@mvc.Controller('/info', root: '/example/lib')
+@Controller('/info', root: '/example/lib')
 class ExampleService1 {
-  @mvc.View('/A')
+  @View('/A')
   viewA() => new Example()
     ..title = "Route A"
     ..description = "Some description of A";
 
-  @mvc.View('/B')
+  @View('/B')
   viewB() => new Example()
     ..title = "Route B"
     ..description = "Some description of B";
@@ -105,14 +105,14 @@ class ExampleService1 {
  * In this example, routes will be '/info2/A' and '/info2/B', but
  * for both their template is '/example/lib/template.html'.
  */
-@mvc.Controller('/info2', root: '/example/lib')
+@Controller('/info2', root: '/example/lib')
 class ExampleService2 {
-  @mvc.View('/A', filePath: '/template')
+  @View('/A', filePath: '/template')
   viewA() => new Example()
     ..title = "Route A"
     ..description = "Some description of A";
 
-  @mvc.View('/B', filePath: '/template')
+  @View('/B', filePath: '/template')
   viewB() => new Example()
     ..title = "Route B"
     ..description = "Some description of B";
@@ -126,7 +126,7 @@ class ExampleService2 {
  * [Model_StringTemplate] and [Model_Template] exist to provide similar
  * features.
  */
-@mvc.View('/randomTemplate', root: '/example/lib/info')
+@View('/randomTemplate', root: '/example/lib/info')
 dynamicFilePath() {
   var filePath = new math.Random().nextBool() ? '/A' : '/B';
   var model = new Example()
@@ -134,5 +134,5 @@ dynamicFilePath() {
     ..description =
     'If you return a Model_Path you can set the templates path dynamically';
 
-  return new mvc.ViewPath(filePath, model: model);
+  return new ViewPath(filePath, model: model);
 }
